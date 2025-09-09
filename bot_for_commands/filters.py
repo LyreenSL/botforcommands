@@ -28,7 +28,7 @@ class ActionsFilter(BaseFilter):
 
         if message.sticker:
             try:
-                action = cache.read_action(message.sticker.file_unique_id)
+                action = cache.read_action(message.chat.id, message.sticker.file_unique_id)
                 return {
                     'action_answer': (
                         f'{get_mention(message)} {action["text"]} '

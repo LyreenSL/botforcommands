@@ -1,5 +1,6 @@
 from aiogram import Router, F
 from aiogram.types import Message
+from aiogram.filters import Command
 
 from bot_for_commands.cache import Cache
 
@@ -7,7 +8,6 @@ from bot_for_commands.cache import Cache
 router = Router()
 
 
-@router.message(F.new_chat_members | F.text == '/welcome_show')
 async def welcome_show(message: Message, cache: Cache):
     welcome_message = cache.read_chat(message.chat.id)['welcome_message']
 
@@ -31,4 +31,14 @@ async def welcome_show(message: Message, cache: Cache):
             await message.answer_animation(welcome_message[4:])
         case 'txt':
             await message.answer(welcome_message[4:])
+
+
+@router.message(F.new_chat_members)
+async def welcome_show_new_member(message: Message, cache: Cache):
+    return await welcome_show(message, cache)
+
+
+@router.message(Command(commands=['welcome_show']))
+async def welcome_show_command(message: Message, cache: Cache):
+    return await welcome_show(message, cache)
 
